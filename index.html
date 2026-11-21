@@ -3,236 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Для Сонечки ❤️</title>
+    <title>Сонечка любимая ❤️</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #fff;
+            color: #ffffff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 30px 15px;
+            padding: 25px 15px 50px;
         }
 
         h1 {
             color: #ff758c;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-align: center;
-            font-size: 2rem;
-            text-shadow: 0 0 10px rgba(255, 117, 140, 0.5);
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(255, 117, 140, 0.4);
         }
 
         p.subtitle {
-            color: #a0a0c0;
-            margin-bottom: 30px;
+            color: #b0b0d0;
+            margin-bottom: 25px;
             text-align: center;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
         }
 
         .calendar-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 15px;
-            max-width: 600px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            max-width: 450px;
             width: 100%;
         }
 
         .day-card {
             background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 14px;
             aspect-ratio: 1;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            backdrop-filter: blur(5px);
+            transition: all 0.2s ease;
             user-select: none;
         }
 
-        .day-card:hover {
-            transform: translateY(-3px);
-            border-color: #ff758c;
-            box-shadow: 0 6px 20px rgba(255, 117, 140, 0.4);
+        .day-card span {
+            font-size: 0.65rem;
+            font-weight: normal;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        .day-card:active {
+            transform: scale(0.95);
         }
 
         .day-card.opened {
-            background: linear-gradient(45deg, #ff758c, #ff7eb3);
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
             border-color: transparent;
-            color: white;
-            box-shadow: 0 0 15px rgba(255, 117, 140, 0.6);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 117, 140, 0.5);
         }
 
-        /* Модальное окно с посланием */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
             justify-content: center;
             align-items: center;
             padding: 20px;
-            z-index: 100;
+            z-index: 999;
+        }
+
+        .modal.active {
+            display: flex;
         }
 
         .modal-content {
-            background: rgba(30, 27, 60, 0.95);
-            border: 1px solid rgba(255, 117, 140, 0.4);
-            border-radius: 24px;
-            padding: 30px;
-            max-width: 450px;
+            background: #1e1b3a;
+            border: 1px solid #ff758c;
+            border-radius: 20px;
+            padding: 25px 20px;
+            max-width: 430px;
             width: 100%;
+            max-height: 82vh;
+            overflow-y: auto;
             text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-            animation: popup 0.3s ease-out forwards;
-        }
-
-        @keyframes popup {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
         }
 
         .modal-title {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: #ff758c;
             margin-bottom: 15px;
+            font-weight: bold;
         }
 
         .modal-text {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #e0e0e0;
-            margin-bottom: 25px;
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #e2e2f0;
+            margin-bottom: 22px;
+            text-align: left;
             white-space: pre-line;
         }
 
         .btn-close {
             background: linear-gradient(45deg, #ff758c, #ff7eb3);
             border: none;
-            padding: 12px 30px;
-            color: white;
+            padding: 10px 25px;
+            color: #fff;
             font-weight: bold;
-            font-size: 1rem;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 117, 140, 0.4);
-            transition: transform 0.2s;
-        }
-
-        .btn-close:hover {
-            transform: scale(1.05);
+            font-size: 0.95rem;
         }
     </style>
 </head>
 <body>
-<div class="calendar-grid" id="grid"></div>
 
-    <!-- Окно для просмотра текста -->
+    <h1>Сонечка любимая ❤️</h1>
+    <p class="subtitle">Маленькие записки для тебя</p>
+
+    <div class="calendar-grid">
+        <div class="day-card" onclick="openDay(1)">1<span>день</span></div><div class="day-card" onclick="openDay(2)">2<span>день</span></div>
+        <div class="day-card" onclick="openDay(3)">3<span>день</span></div>
+        <div class="day-card" onclick="openDay(4)">4<span>день</span></div>
+        <div class="day-card" onclick="openDay(5)">5<span>день</span></div>
+        <div class="day-card" onclick="openDay(6)">6<span>день</span></div>
+        <div class="day-card" onclick="openDay(7)">7<span>день</span></div>
+        <div class="day-card" onclick="openDay(8)">8<span>день</span></div>
+        <div class="day-card" onclick="openDay(9)">9<span>день</span></div>
+        <div class="day-card" onclick="openDay(10)">10<span>день</span></div>
+        <div class="day-card" onclick="openDay(11)">11<span>день</span></div>
+        <div class="day-card" onclick="openDay(12)">12<span>день</span></div>
+        <div class="day-card" onclick="openDay(13)">13<span>день</span></div>
+        <div class="day-card" onclick="openDay(14)">14<span>день</span></div>
+        <div class="day-card" onclick="openDay(15)">15<span>день</span></div>
+        <div class="day-card" onclick="openDay(16)">16<span>день</span></div>
+        <div class="day-card" onclick="openDay(17)">17<span>день</span></div>
+        <div class="day-card" onclick="openDay(18)">18<span>день</span></div>
+        <div class="day-card" onclick="openDay(19)">19<span>день</span></div>
+        <div class="day-card" onclick="openDay(20)">20<span>день</span></div>
+        <div class="day-card" onclick="openDay(21)">21<span>день</span></div>
+        <div class="day-card" onclick="openDay(22)">22<span>день</span></div>
+        <div class="day-card" onclick="openDay(23)">23<span>день</span></div>
+        <div class="day-card" onclick="openDay(24)">24<span>день</span></div>
+        <div class="day-card" onclick="openDay(25)">25<span>день</span></div>
+        <div class="day-card" onclick="openDay(26)">26<span>день</span></div>
+        <div class="day-card" onclick="openDay(27)">27<span>день</span></div>
+        <div class="day-card" onclick="openDay(28)">28<span>день</span></div>
+        <div class="day-card" onclick="openDay(29)">29<span>день</span></div>
+        <div class="day-card" onclick="openDay(30)">30<span>день</span></div>
+    </div>
+
     <div class="modal" id="modal">
         <div class="modal-content">
-            <div class="modal-title" id="modalTitle">День 1</div>
-            <div class="modal-text" id="modalText">Текст послания...</div>
+            <div class="modal-title" id="mTitle"></div>
+            <div class="modal-text" id="mText"></div>
             <button class="btn-close" onclick="closeModal()">Закрыть ❤️</button>
         </div>
     </div>
 
     <script>
-        // Список записок на 30 дней (можешь менять тексты на свои!)
-        const messages = [
-            "День 1: Спасибо за то, что ты появляешься в моем дне. С тобой всё вокруг становится теплее.",
-            "День 2: Твоя улыбка и голос — это то, что мгновенно поднимает мне настроение.",
-            "День 3: Даже на расстоянии в тысячи километров я чувствую тебя очень близко.",
-            "День 4: Помни: ты под моей защитой, всегда и несмотря ни на что.",
-            "День 5: Наша ночная болтовня — моё самое любимое время за весь день.",
-            "День 6: Ты уникальная, милая и невероятно красивая. Не забывай об этом!",
-            "День 7: Кажется, мы идеальная команда — хоть в играх, хоть в жизни.",
-            "День 8: Забирай свой ежедневный обнимательный заряд. Я рядом!",
-            "День 9: Твой юмор и твои приколы — это отдельный кайф.",
-            "День 10: Спасибо за твоё доверие. Для меня это очень ценно.",
-            "День 11: Улыбнись прямо сейчас! Тебе очень идёт улыбка 😊",
-            "День 12: Осторожно: этот карточка заряжена на победу во всех делах сегодня!",
-            "День 13: Ты — лучшее, что случилось со мной за последнее время.",
-            "День 14: Жду не дождусь, когда мы сможем сыграть во что-нибудь снова.",
-            "День 15: Ты делаешь меня лучше просто тем, что ты есть.",
-            "День 16: Всегда помни, что ты можешь мне доверить абсолютно всё.",
-            "День 17: Прошел уже 17-й день, а ты всё так же очаровательна!",
-            "День 18: Даже в самые пасмурные дни ты — моё личное сонечко.",
-            "День 19: Отправляю тебе миллион виртуальных поцелуев 💋",
-            "День 20: Ты невероятно сильная и классная девушка. Горжусь тобой!",
-            "День 21: Каждая минута общения с тобой имеет значение.",
-            "День 22: Просто напоминание: ты самая лучшая!",
-            "День 23: Надеюсь, твой день сегодня проходит легко и спокойно.",
-            "День 24: С тобой приятно даже просто молчать.",
-            "День 25: Ты очень важный для меня человек.",
-            "День 26: Если тебе станет грустно — просто перечитай эти карточки.",
-            "День 27: Скоро дойдём до 30 дней, но мои тёплые слова к тебе не закончатся никогда.",
-            "День 28: Спасибо за твою поддержку и искренность.",
-            "День 29: Ты настоящая и крутая. Обожаю тебя за это.",
-            "День 30: Финальный день этого календаря, но лишь начало нашей с тобой истории ❤️"
-        ];
-
-        // Загружаем сохраненный прогресс из памяти браузера
-        let openedDays = JSON.parse(localStorage.getItem('sonya_opened_days')) || [];
-
-        const grid = document.getElementById('grid');
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalText = document.getElementById('modalText');
-
-        // Отрисовка 30 карточек
-        messages.forEach((msg, index) => {
-            const dayNum = index + 1;
-            const card = document.createElement('div');
-            card.className = 'day-card';
-            card.innerText = dayNum;
-
-            if (openedDays.includes(dayNum)) {
-                card.classList.add('opened');
+        const texts = {1: "Я собрал это просто потому, что ты мне правда небезразлична.\n\nМы ещё не так давно и плотно друг друга знаем, между нами вообще разные страны, но ты уже успела стать для меня тем человеком, о котором я постоянно думаю.\n\nЛюблю тебя, Сонечка.",
+            2: "Удивительно, как быстро рядом с тобой пропадает всякая напряжность.\n\nС другими людьми иногда приходится подбирать слова или делать вид, что всё ок, а с тобой получается просто быть собой.\n\nСпасибо тебе за эту лёгкость и за то, что ты настоящая.",
+            3: "Мне до безумия нравится, как мы можем зацепиться за какую-то мелочь или глупую шутку и улететь в разговоры до ночи.\n\nДаже через экран от тебя идёт какое-то своё особенное тепло, которого ни у кого другого нет.\n\nЯ очень рад, что ты у меня есть.",
+            4: "Ты реально очень красивая, живая и притягательная девушка.\n\nИногда ты наверняка сама этого не замечаешь или начинаешь загоняться из-за мелочей, но со стороны ты выглядишь потрясающе.\n\nПросто помни, что я всегда на твоей стороне.",
+            5: "То, что мы далеко друг другу, иногда бесит — хотелось бы просто взять и оказаться рядом.\n\nНо даже на расстоянии ты ощущаешься близкой.\n\nМне с тобой очень хорошо, и я хочу, чтобы это не заканчивалось.",
+            6: "Хочу, чтобы у тебя сегодня всё складывалось спокойно и без лишней дёрганности.\n\nПусть рядом будет поменьше тех, кто портит настроение, и побольше моментов, от которых хочется улыбаться.\n\nЯ тебя очень люблю.",
+            7: "Прошла первая неделя, а мне всё так же интересно с тобой разговаривать, шутить и просто быть на связи.\n\nВ тебе есть какой-то свой огонь и характер, который цепляет с первых секунд.\n\nТы суперская, честно.",
+            8: "С тобой даже просто сидеть в звонке или залипать в игры — уже кайф.\n\nНе нужно придумывать ничего сверхъестественного, когда человек твой.\n\nРядом с тобой время будто идёт иначе.",
+            9: "Спасибо тебе за то, что умеешь слышать и говорить нормально, когда что-то волнует.\n\nЭто редкое качество, и я в тебе его очень ценю.\n\nМне спокойно рядом с тобой.",
+            10: "Я ловлю себя на том, что каждый раз, когда вижу от тебя сообщение или уведомление, внутри становится теплее.\n\nТы умеешь вытащить из любого хренового настроения.\n\nСпасибо тебе за это, моя хорошая.",
+            11: "Не забывай нормально отдыхать и не загонять себя, даже если мы опять засиделись допоздна.\n\nМне важно, чтобы ты чувствовала себя хорошо и не выматывалась в ноль.\n\nБереги себя, пожалуйста.",
+            12: "Мне нравится, какая ты разная: то мягкая и тёплая, то острая и с характером.\n\nС тобой никогда не бывает скучно или пресно.\n\nВ тебе есть всё, что заставляет смотреть и слушать с интересом.",
+            13: "Пусть сегодня у тебя будет хотя бы один момент, от которого сама собой появится улыбка.\n\nТы её заслуживаешь.\n\nЛюблю, когда тебе хорошо.",
+            14: "Забавно, что мы ещё не встречались вживую, но связь между нами уже такая сильная.\n\nОчень хочу, чтобы однажды у нас всё-таки получилось увидеться и пожить этот момент по-настоящему.\n\nБыло бы круто.",
+            15: "Половина месяца уже позади, а я всё так же рад каждому дню, когда мы на связи.\n\nСпасибо тебе за твои слова, эмоции и за то, что ты вообще появилась в моей жизни.\n\nТы мне очень дорога.",16: "Если кто-то или что-то сегодня попытается вывести тебя из себя — не трать на это свои нервы.\n\nТы слишком крутая, чтобы распыляться на всякую чушь.\n\nЯ рядом, если захочешь выговориться.",
+            17: "Иногда мне хватает пары твоих слов, чтобы в голове всё встало на свои места.\n\nТы умеешь давать какое-то тихое, но очень сильное спокойствие.\n\nСпасибо тебе за это.",
+            18: "Без лишнего пафоса и красивых сказок: ты мне правда очень дорога.\n\nМне важно то, что между нами есть, и я дорожу тобой по-настоящему.\n\nЛюблю тебя.",
+            19: "Иногда представляю, как мы сидим где-нибудь в тишине, пьём что-то вкусное и просто болтаем обо всём без спешки.\n\nБез экранов и расстояния.\n\nВерю, что однажды так и будет.",
+            20: "Ты сильная, умная и очень красивая девушка.\n\nНе давай никаким сомнениям сбивать тебя с толку.\n\nЯ вижу тебя настоящей, и ты мне безумно нравишься.",
+            21: "Три недели прошло, а ощущение такое, будто мы уже успели прожить целый отдельный мир.\n\nМне нравится, как мы понимаем друг друга и остаёмся на одной волне.\n\nДальше — только больше.",
+            22: "Даже если ты сегодня сонная, уставшая или вообще не в духе — для меня ты всё равно остаёшься той же самой Сонечкой.\n\nНе нужно всегда быть идеальной, чтобы быть любимой.\n\nЯ тебя люблю любой.",
+            23: "Желаю тебе сегодня тихого, тёплого вечера без лишней суеты и тяжести в голове.\n\nПросто выдохни и отдохни.\n\nОбнимаю мысленно.",
+            24: "Мне нравится, как у нас рождаются свои шутки и приколы, понятные только нам двоим.\n\nИз таких мелочей и складывается что-то по-настоящему своё.\n\nНаш вайб — это отдельный кайф.",
+            25: "Эти карточки скоро закончатся, но моё отношение к тебе от этого никуда не денется.\n\nЭто только кусочек нашей истории.\n\nМне очень хочется, чтобы мы шли дальше.",
+            26: "Спасибо тебе за то, что ты есть в моих днях.\n\nДаже когда мы просто заняты своими делами, зная, что ты где-то рядом на связи, уже становится спокойнее.\n\nЦеню тебя.",
+            27: "Спасибо за твою искренность, за эмоции и за то, что ты не боишься быть живой.\n\nС тобой по-настоящему интересно.\n\nЯ очень рад, что выбрал именно тебя.",
+            28: "Если тебе когда-нибудь станет тяжело, грустно или просто захочется с кем-то поговорить — я никуда не денусь.\n\nТы можешь на меня рассчитывать.\n\nЛюблю тебя, Сонечка.",
+            29: "Каждый день ловлю себя на мысли, как здорово, что мы однажды начали так плотно общаться.\n\nТы стала одним из самых тёплых событий в моей жизни за последнее время.\n\nСпасибо тебе.",            30: "Вот и тридцатый день.\n\nКарточки подошли к концу, но всё самое живое у нас с тобой ещё впереди.\n\nСпасибо тебе за каждый день рядом, за эмоции и за тепло.\n\nЯ тебя очень сильно люблю. ❤️"
+            30: "Вот и тридцатый день.\n\nКарточки подошли к концу, но всё самое живое у нас с тобой ещё впереди.\n\nСпасибо тебе за каждый день рядом, за эмоции и за тепло.\n\nЯ тебя очень сильно люблю. ❤️"
+        };function readSavedDays() {
+            try {
+                const saved = localStorage.getItem("sonya_days");
+                const parsed = saved ? JSON.parse(saved) : [];
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (err) {
+                return [];
             }
+        }
 
-            card.onclick = () => openDay(dayNum, msg, card);
-            grid.appendChild(card);
+        function writeSavedDays(list) {
+            try {
+                localStorage.setItem("sonya_days", JSON.stringify(list));
+            } catch (err) {}
+        }
+
+        let opened = readSavedDays();
+        const cards = document.querySelectorAll(".day-card");
+
+        opened.forEach(function(num) {
+            if (cards[num - 1]) {
+                cards[num - 1].classList.add("opened");
+            }
         });
 
-        function openDay(dayNum, text, cardElement) {
-            modalTitle.innerText = День ${dayNum} 💌;
-            modalText.innerText = text;
-            modal.style.display = 'flex';// Сохраняем день как открытый
-            if (!openedDays.includes(dayNum)) {
-                openedDays.push(dayNum);
-                localStorage.setItem('sonya_opened_days', JSON.stringify(openedDays));
-                cardElement.classList.add('opened');
+        function openDay(num) {
+            document.getElementById("mTitle").innerText = "День " + num + " 💌";
+            document.getElementById("mText").innerText = texts[num] || "";
+            document.getElementById("modal").classList.add("active");
+
+            if (!opened.includes(num)) {
+                opened.push(num);
+                writeSavedDays(opened);
+                if (cards[num - 1]) {
+                    cards[num - 1].classList.add("opened");
+                }
             }
         }
 
         function closeModal() {
-            modal.style.display = 'none';
-        }
-
-        // Закрытие при клике мимо окна
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
-            }
+            document.getElementById("modal").classList.remove("active");
         }
     </script>
 </body>
 </html>
-    <h1>Для Сонечки ✨</h1>
-    <p class="subtitle">Открывай по одной карточке каждый день ❤️</p>
+            
