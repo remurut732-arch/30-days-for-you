@@ -6,22 +6,40 @@
 <title>Сонечка любимая ❤️</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:sans-serif}
-body{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:25px 15px 50px}
+body{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:25px 15px 50px;position:relative;overflow-x:hidden}
+.bg-decor{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.heart-item{position:absolute;bottom:-40px;color:#ff758c;opacity:0.22;user-select:none;animation:floatUp linear infinite}
+.dot-item{position:absolute;bottom:-20px;border-radius:50%;background:radial-gradient(circle,rgba(255,154,184,0.55),rgba(255,117,140,0));pointer-events:none;animation:floatDot linear infinite}
+@keyframes floatUp{
+  0%{transform:translateY(0) translateX(0) rotate(-8deg);opacity:0}
+  15%{opacity:0.25}
+  85%{opacity:0.22}
+  100%{transform:translateY(-110vh) translateX(18px) rotate(12deg);opacity:0}
+}
+@keyframes floatDot{
+  0%{transform:translateY(0) scale(0.8);opacity:0}
+  20%{opacity:0.35}
+  80%{opacity:0.25}
+  100%{transform:translateY(-108vh) scale(1.15);opacity:0}
+}
+h1,.sub,.grid,.modal{position:relative;z-index:1}
 h1{color:#ff758c;margin-bottom:8px;text-align:center;font-size:1.8rem}
 .sub{color:#b0b0d0;margin-bottom:24px;text-align:center;font-size:0.95rem}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;max-width:450px;width:100%}
-.card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:14px;aspect-ratio:1;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:1.2rem;font-weight:bold;cursor:pointer;user-select:none}
+.card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:14px;aspect-ratio:1;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:1.2rem;font-weight:bold;cursor:pointer;user-select:none;backdrop-filter:blur(4px);transition:transform 0.15s ease}
+.card:active{transform:scale(0.95)}
 .card span{font-size:0.65rem;opacity:0.7;margin-top:2px}
 .card.opened{background:linear-gradient(135deg,#ff758c,#ff7eb3);border-color:transparent}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;padding:20px;z-index:99}
 .modal.open{display:flex}
 .box{background:#1e1b3a;border:1px solid #ff758c;border-radius:20px;padding:24px 20px;max-width:430px;width:100%;max-height:82vh;overflow-y:auto;text-align:center}
 .title{color:#ff758c;font-size:1.3rem;font-weight:bold;margin-bottom:14px}
-.text{color:#e2e2f0;font-size:1rem;line-height:1.65;text-align:left;margin-bottom:20px}
+.text{color:#e2e2f0;font-size:1rem;line-height:1.65;text-align:left;margin-bottom:20px;white-space:pre-line}
 .btn{background:linear-gradient(45deg,#ff758c,#ff7eb3);border:none;padding:10px 26px;color:#fff;font-weight:bold;border-radius:50px;cursor:pointer}
 </style>
 </head>
 <body>
+<div class="bg-decor" id="bgDecor"></div>
 <h1>Сонечка любимая ❤️</h1>
 <p class="sub">Новая карточка раз в 24 часа</p>
 <div class="grid" id="grid"></div>
@@ -46,7 +64,7 @@ const days=["Честно, мне просто правда хорошо с то
 "Не забывай нормально отдыхать и не загонять себя, даже если мы опять засиделись допоздна. Мне важно, чтобы ты чувствовала себя хорошо и не выматывалась в ноль. Береги себя, пожалуйста.",
 "Мне нравится, какая ты разная: то мягкая и тёплая, то острая и с характером. С тобой никогда не бывает скучно или пресно. В тебе есть всё, что заставляет смотреть и слушать с интересом.",
 "Пусть сегодня у тебя будет хотя бы один момент, от которого сама собой появится улыбка. Ты её заслуживаешь. Люблю, когда тебе хорошо.",
-"Забавно, что мы ещё не встречались вживую, но связь между нами уже такая сильная. Очень хочу, чтобы однажды у нас всё-таки получилось увидеться и пожить этот момент по-настоящему. Было бы круто.",
+"Забавно, что мы ещё не встречались вживую, но связь между нами уже такая сильная. Очень хочу, чтобы однажды у нас всё-таки получилось увидеться и пожить этот момент по-напостоящему. Было бы круто.",
 "Половина месяца уже позади, а я всё так же рад каждому дню, когда мы на связи. Спасибо тебе за твои слова, эмоции и за то, что ты вообще появилась в моей жизни. Ты мне очень дорога.",
 "Если кто-то или что-то сегодня попытается вывести тебя из себя — не трать на это свои нервы. Ты слишком крутая, чтобы распыляться на всякую чушь. Я рядом, если захочешь выговориться.",
 "Иногда мне хватает пары твоих слов, чтобы в голове всё встало на свои места. Ты умеешь давать какое-то тихое, но очень сильное спокойствие. Спасибо тебе за это.",
@@ -64,6 +82,30 @@ const days=["Честно, мне просто правда хорошо с то
 "Вот и тридцатый день. Карточки подошли к концу, но всё самое живое у нас с тобой ещё впереди. Спасибо тебе за каждый день рядом, за эмоции и за тепло. Я тебя очень сильно люблю. ❤️"
 ];
 
+const bgDecor = document.getElementById("bgDecor");
+const heartChars = ["♥", "♡", "❤"];
+for (let i = 0; i < 14; i++) {
+  const h = document.createElement("div");
+  h.className = "heart-item";
+  h.textContent = heartChars[i % heartChars.length];
+  h.style.left = ((i * 7.3) % 95) + "%";
+  h.style.fontSize = (14 + (i % 4) * 5) + "px";
+  h.style.animationDuration = (11 + (i % 6) * 2.5) + "s";
+  h.style.animationDelay = (-((i * 2.1) % 12)) + "s";
+  bgDecor.appendChild(h);
+}
+for (let j = 0; j < 10; j++) {
+  const d = document.createElement("div");
+  d.className = "dot-item";
+  const size = 12 + (j % 3) * 8;
+  d.style.width = size + "px";
+  d.style.height = size + "px";
+  d.style.left = ((j * 9.7 + 4) % 94) + "%";
+  d.style.animationDuration = (13 + (j % 5) * 3) + "s";
+  d.style.animationDelay = (-((j * 1.8) % 10)) + "s";
+  bgDecor.appendChild(d);
+}
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 let state = { opened: [], lastOpen: 0 };
 try {
@@ -80,11 +122,24 @@ function saveState() {
   } catch (e) {}
 }
 
-function formatLeft(ms) {
-  const totalMin = Math.max(1, Math.ceil(ms / 60000));
-  const h = Math.floor(totalMin / 60);
-  const m = totalMin % 60;
-  return h > 0 ? h + " ч " + m + " мин" : m + " мин";
+function pad2(n) {
+  return n < 10 ? "0" + n : "" + n;
+}
+
+function formatDetailedLeft(ms) {
+  const totalSec = Math.max(0, Math.ceil(ms / 1000));
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  return h + " ч " + pad2(m) + " мин " + pad2(s) + " сек";
+}
+
+let timerId = null;
+function stopTimer() {
+  if (timerId !== null) {
+    clearInterval(timerId);
+    timerId = null;
+  }
 }
 
 const grid = document.getElementById("grid");
@@ -98,13 +153,22 @@ days.forEach((msg, i) => {
   el.className = "card" + (state.opened.includes(day) ? " opened" : "");
   el.innerHTML = day + "<span>день</span>";
   el.addEventListener("click", () => {
+    stopTimer();
     const alreadyOpened = state.opened.includes(day);
     const now = Date.now();
-    const diff = now - state.lastOpen;
-
-    if (!alreadyOpened && state.lastOpen > 0 && diff < DAY_MS) {
+    const diff = now - state.lastOpen;if (!alreadyOpened && state.lastOpen > 0 && diff < DAY_MS) {
       mTitle.textContent = "Рано пока ⏳";
-      mText.textContent = "Следующую карточку можно будет открыть через " + formatLeft(DAY_MS - diff) + ".";
+      const updateCountdown = () => {
+        const left = DAY_MS - (Date.now() - state.lastOpen);
+        if (left <= 0) {
+          stopTimer();
+          mText.textContent = "Время вышло! Можешь открыть следующую карточку.";
+          return;
+        }
+        mText.textContent = "До следующей карточки осталось:\n" + formatDetailedLeft(left);
+      };
+      updateCountdown();
+      timerId = setInterval(updateCountdown, 1000);
       modal.classList.add("open");
       return;
     }
@@ -123,7 +187,10 @@ days.forEach((msg, i) => {
   grid.appendChild(el);
 });
 
-document.getElementById("closeBtn").addEventListener("click", () => modal.classList.remove("open"));
+document.getElementById("closeBtn").addEventListener("click", () => {
+  stopTimer();
+  modal.classList.remove("open");
+});
 </script>
 </body>
 </html>
