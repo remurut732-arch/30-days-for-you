@@ -23,7 +23,7 @@ h1{color:#ff758c;margin-bottom:8px;text-align:center;font-size:1.8rem}
 </head>
 <body>
 <h1>Сонечка любимая ❤️</h1>
-<p class="sub">Маленькие записки для тебя</p>
+<p class="sub">Новая карточка раз в 24 часа</p>
 <div class="grid" id="grid"></div>
 <div class="modal" id="modal">
   <div class="box">
@@ -33,7 +33,7 @@ h1{color:#ff758c;margin-bottom:8px;text-align:center;font-size:1.8rem}
   </div>
 </div>
 <script>
-const days=["Я собрал это просто потому, что ты мне правда небезразлична. Мы ещё не так давно и плотно друг друга знаем, между нами вообще разные страны, но ты уже успела стать для меня тем человеком, о котором я постоянно думаю. Люблю тебя, Сонечка.",
+const days=["Честно, мне просто правда хорошо с тобой. Между нами разные страны, мы ещё не так много друг о друге знаем, но ты уже успела стать человеком, к которому тянет и о котором постоянно думаешь. Люблю тебя, Сонечка.",
 "Удивительно, как быстро рядом с тобой пропадает всякая напряжность. С другими людьми иногда приходится подбирать слова или делать вид, что всё ок, а с тобой получается просто быть собой. Спасибо тебе за эту лёгкость и за то, что ты настоящая.",
 "Мне до безумия нравится, как мы можем зацепиться за какую-то мелочь или глупую шутку и улететь в разговоры до ночи. Даже через экран от тебя идёт какое-то своё особенное тепло, которого ни у кого другого нет. Я очень рад, что ты у меня есть.",
 "Ты реально очень красивая, живая и притягательная девушка. Иногда ты наверняка сама этого не замечаешь или начинаешь загоняться из-за мелочей, но со стороны ты выглядишь потрясающе. Просто помни, что я всегда на твоей стороне.",
@@ -63,30 +63,67 @@ const days=["Я собрал это просто потому, что ты мн�
 "Каждый день ловлю себя на мысли, как здорово, что мы однажды начали так плотно общаться. Ты стала одним из самых тёплых событий в моей жизни за последнее время. Спасибо тебе.",
 "Вот и тридцатый день. Карточки подошли к концу, но всё самое живое у нас с тобой ещё впереди. Спасибо тебе за каждый день рядом, за эмоции и за тепло. Я тебя очень сильно люблю. ❤️"
 ];
-let opened=[];
-try{opened=JSON.parse(localStorage.getItem("sonya_days"))||[]}catch(e){opened=[]}
-const grid=document.getElementById("grid");
-const modal=document.getElementById("modal");
-const mTitle=document.getElementById("mTitle");
-const mText=document.getElementById("mText");
-days.forEach((msg,i)=>{
-  const day=i+1;
-  const el=document.createElement("div");
-  el.className="card"+(opened.includes(day)?" opened":"");
-  el.innerHTML=day+"<span>день</span>";
-  el.addEventListener("click",()=>{
-    mTitle.textContent="День "+day+" 💌";
-    mText.textContent=msg;
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+let state = { opened: [], lastOpen: 0 };
+try {
+  const saved = JSON.parse(localStorage.getItem("sonya_days_v2"));
+  if (saved && Array.isArray(saved.opened)) {
+    state.opened = saved.opened;
+    state.lastOpen = Number(saved.lastOpen) || 0;
+  }
+} catch (e) {}
+
+function saveState() {
+  try {
+    localStorage.setItem("sonya_days_v2", JSON.stringify(state));
+  } catch (e) {}
+}
+
+function formatLeft(ms) {
+  const totalMin = Math.max(1, Math.ceil(ms / 60000));
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  return h > 0 ? h + " ч " + m + " мин" : m + " мин";
+}
+
+const grid = document.getElementById("grid");
+const modal = document.getElementById("modal");
+const mTitle = document.getElementById("mTitle");
+const mText = document.getElementById("mText");
+
+days.forEach((msg, i) => {
+  const day = i + 1;
+  const el = document.createElement("div");
+  el.className = "card" + (state.opened.includes(day) ? " opened" : "");
+  el.innerHTML = day + "<span>день</span>";
+  el.addEventListener("click", () => {
+    const alreadyOpened = state.opened.includes(day);
+    const now = Date.now();
+    const diff = now - state.lastOpen;
+
+    if (!alreadyOpened && state.lastOpen > 0 && diff < DAY_MS) {
+      mTitle.textContent = "Рано пока ⏳";
+      mText.textContent = "Следующую карточку можно будет открыть через " + formatLeft(DAY_MS - diff) + ".";
+      modal.classList.add("open");
+      return;
+    }
+
+    mTitle.textContent = "День " + day + " 💌";
+    mText.textContent = msg;
     modal.classList.add("open");
-    if(!opened.includes(day)){
-      opened.push(day);
-      try{localStorage.setItem("sonya_days",JSON.stringify(opened))}catch(e){}
+
+    if (!alreadyOpened) {
+      state.opened.push(day);
+      state.lastOpen = now;
+      saveState();
       el.classList.add("opened");
     }
   });
   grid.appendChild(el);
 });
-document.getElementById("closeBtn").addEventListener("click",()=>modal.classList.remove("open"));
+
+document.getElementById("closeBtn").addEventListener("click", () => modal.classList.remove("open"));
 </script>
 </body>
 </html>
